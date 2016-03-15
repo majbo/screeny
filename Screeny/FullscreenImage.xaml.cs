@@ -19,6 +19,9 @@ namespace Screeny
     /// </summary>
     public partial class FullscreenImage : Window
     {
+        private Point _startPoint;
+        private Rectangle _rectangle;
+
         public FullscreenImage(ImageSource source)
         {
             InitializeComponent();
@@ -36,7 +39,46 @@ namespace Screeny
 
         private void surface_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            //http://csharphelper.com/blog/2014/12/let-user-move-resize-rectangle-wpf-c/
+            if (_rectangle != null)
+            {
+                surface.Children.Remove(_rectangle);
+            }
+            _startPoint = e.GetPosition(surface);
+
+            _rectangle = new Rectangle
+            {
+                Stroke = Brushes.LightBlue,
+                StrokeThickness = 2
+            };
+            Canvas.SetLeft(_rectangle, _startPoint.X);
+            Canvas.SetTop(_rectangle, _startPoint.X);
+            surface.Children.Add(_rectangle);
         }
+
+        private void surface_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            
+        }
+
+        private void surface_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Released || _rectangle == null)
+                return;
+
+            var pos = e.GetPosition(surface);
+
+            var x = Math.Min(pos.X, _startPoint.X);
+            var y = Math.Min(pos.Y, _startPoint.Y);
+
+            var w = Math.Max(pos.X, _startPoint.X) - x;
+            var h = Math.Max(pos.Y, _startPoint.Y) - y;
+
+            _rectangle.Width = w;
+            _rectangle.Height = h;
+
+            Canvas.SetLeft(_rectangle, x);
+            Canvas.SetTop(_rectangle, y);
+        }
+
     }
 }

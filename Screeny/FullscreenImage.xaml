@@ -10,7 +10,9 @@
         WindowStyle="None"
         KeyDown="Window_KeyDown">
     <Canvas x:Name="surface"
-        MouseLeftButtonDown="surface_MouseLeftButtonDown">
+        MouseLeftButtonDown="surface_MouseLeftButtonDown"
+        MouseLeftButtonUp="surface_MouseLeftButtonUp"
+        MouseMove="surface_MouseMove">
         <Canvas.Background>
             <ImageBrush x:Name="image"></ImageBrush>
         </Canvas.Background>
